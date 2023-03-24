@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro timer</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+   <div id = "app"> 
+
+
+    <h1 class="text-4xl mb-4">Pomodoro Timer</h1>
+    <div class="flex space-x-4">
+        <button @click="setTimer(25); startTimer();" class="bg-blue-500 text-white px-4 py-2">25 mins</button>
+        <button @click="setTimer(5)" class="bg-green-500 text-white px-4 py-2">5 mins</button>
+        <button @click="setTimer(15)" class="bg-yellow-500 text-white px-4 py-2">15 mins</button>
+    </div>
+    <div class="mt-8">
+        <div class="text-6xl">{{ timeDisplay}}</div>
+        <button @click="startTimer" class="bg-blue-500 text-white px-4 py-2">Start</button>
+        <button @click="stopTimer" class="bg-red-500 text-white px-4 py-2">Stop</button>
+    </div>
+
+
+
+
+   </div> 
+
+
+   <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          timer: null,
+          timeLeft: 0,
+          timerDuration: 0
+        };
+      },
+      computed: {
+        timeDisplay() {
+          const minutes = Math.floor(this.timeLeft / 60);
+          const seconds = this.timeLeft % 60;
+          return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+      },
+      methods: {
+        setTimer(minutes) {
+          this.timerDuration = minutes * 60;
+          this.timeLeft = this.timerDuration;
+        },
+        startTimer() {
+          if (this.timer) clearInterval(this.timer);
+          this.timer = setInterval(() => {
+            if (this.timeLeft > 0) {
+              this.timeLeft--;
+            } else {
+              clearInterval(this.timer);
+              alert('Time is up!');
+            }
+          }, 1000);
+        },
+        stopTimer() {
+          if (this.timer) clearInterval(this.timer);
+        }
+      }
+    }).mount('#app');
+    </script>
+    
+
+</body>
+</html>
